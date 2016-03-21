@@ -207,7 +207,8 @@
             }break;
                 case FSCalendarCellShapeRoundedRect:
             {
-                path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -16, 0)
+                path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -11, 0)
+
                                              byRoundingCorners:self.cornerRectStyle
                                                    cornerRadii:CGSizeMake(10,10)].CGPath;
             }break;
@@ -321,7 +322,8 @@
         }break;
         case FSCalendarCellShapeRoundedRect:
         {
-            path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -16, 0)
+
+            path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -11, 0)
                                          byRoundingCorners:self.cornerRectStyle
                                                cornerRadii:CGSizeMake(10,10)].CGPath;
         }break;
