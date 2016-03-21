@@ -504,6 +504,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"selected indexPath:section:%d, row:%d",indexPath.section,indexPath.row);
     FSCalendarCell *cell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.dateIsSelected = YES;
     [cell performSelecting];

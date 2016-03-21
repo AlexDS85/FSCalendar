@@ -51,7 +51,7 @@
         self.subtitleLabel = label;
         
         shapeLayer = [CAShapeLayer layer];
-        shapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+        shapeLayer.backgroundColor = [UIColor redColor].CGColor;
         shapeLayer.hidden = YES;
         [self.contentView.layer insertSublayer:shapeLayer below:_titleLabel.layer];
         self.backgroundLayer = shapeLayer;
@@ -194,9 +194,25 @@
     }
     if (!shouldHiddenBackgroundLayer) {
         
-        CGPathRef path = self.cellShape == FSCalendarCellShapeCircle ?
-        [UIBezierPath bezierPathWithOvalInRect:_backgroundLayer.bounds].CGPath :
-        [UIBezierPath bezierPathWithRect:_backgroundLayer.bounds].CGPath;
+        CGPathRef path;
+        switch (self.cellShape) {
+            case FSCalendarCellShapeCircle:
+                path = [UIBezierPath bezierPathWithOvalInRect:_backgroundLayer.bounds].CGPath ;
+                
+                break;
+                
+            case FSCalendarCellShapeRectangle:
+            {
+                path = [UIBezierPath bezierPathWithRect:_backgroundLayer.bounds].CGPath;
+            }break;
+                case FSCalendarCellShapeRoundedRect:
+            {
+                path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -23, 0)  byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(10,10)].CGPath;
+            }break;
+            default:
+                break;
+        }
+        
         if (!CGPathEqualToPath(_backgroundLayer.path,path)) {
             _backgroundLayer.path = path;
         }

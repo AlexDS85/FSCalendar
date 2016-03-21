@@ -31,6 +31,8 @@
     calendar.delegate = self;
     calendar.backgroundColor = [UIColor whiteColor];
     calendar.allowsMultipleSelection = YES;
+    calendar.appearance.cellShape = FSCalendarCellShapeRoundedRect;
+    
     [self.view addSubview:calendar];
     self.calendar = calendar;
 }
@@ -57,11 +59,11 @@
 
 - (BOOL)calendar:(FSCalendar *)calendar shouldDeselectDate:(NSDate *)date
 {
-    BOOL shouldDedeselect = [_calendar dayOfDate:date] != 7;
-    if (!shouldDedeselect) {
-        [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Forbidden date %@ to be deselected",[calendar stringFromDate:date]] message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        return NO;
-    }
+//    BOOL shouldDedeselect = [_calendar dayOfDate:date] != 7;
+//    if (!shouldDedeselect) {
+//        [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Forbidden date %@ to be deselected",[calendar stringFromDate:date]] message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+//        return NO;
+//    }
     return YES;
 }
 
@@ -71,7 +73,7 @@
     [calendar.selectedDates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [selectedDates addObject:[calendar stringFromDate:obj format:@"yyyy/MM/dd"]];
     }];
-    NSLog(@"selected dates is %@",selectedDates);
+   // NSLog(@"selected dates is %@",selectedDates);
 }
 
 - (void)calendar:(FSCalendar *)calendar didDeselectDate:(NSDate *)date
@@ -80,14 +82,14 @@
     [calendar.selectedDates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [selectedDates addObject:[calendar stringFromDate:obj format:@"yyyy/MM/dd"]];
     }];
-    NSLog(@"selected dates is %@",selectedDates);
+  //  NSLog(@"selected dates is %@",selectedDates);
 }
 
 - (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance selectionColorForDate:(NSDate *)date
 {
-    if ([_calendar dayOfDate:date] % 2 == 0) {
-        return appearance.selectionColor;
-    }
+//    if ([_calendar dayOfDate:date] % 2 == 0) {
+//        return appearance.selectionColor;
+//    }
     return [UIColor purpleColor];
 }
 
