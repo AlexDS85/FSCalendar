@@ -505,7 +505,74 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected indexPath:section:%d, row:%d",indexPath.section,indexPath.row);
+    
+    UIRectCorner cornerStyle;
+//    FSCalendarCell *rightCell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row+6
+//                                                                                                            inSection:indexPath.section]];
+//    if (rightCell.isSelected) {
+//        NSLog(@"right is selected aswell");
+//        rightCell.cornerRectStyle = (UIRectCornerBottomRight | UIRectCornerTopRight);
+//        [rightCell invalidateCellShapes];
+//        
+//    }
+    
+    NSMutableArray * leftSelCells = [NSMutableArray new];
+    int cnt = 1;
+    FSCalendarCell *leftCell;
+    leftCell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-6
+                                                                                           inSection:indexPath.section]];
+    while (leftCell.isSelected) {
+        [leftSelCells addObject:leftCell];
+        cnt++;
+        leftCell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row-cnt*6
+                                                                                               inSection:indexPath.section]];
+    }
+
+    [leftSelCells enumerateObjectsUsingBlock:^(FSCalendarCell* leftCellObj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == [leftSelCells count]-1) {
+            leftCellObj.cornerRectStyle = (UIRectCornerBottomLeft | UIRectCornerTopLeft);
+        }else
+            leftCellObj.cornerRectStyle = 0;
+        
+        [leftCellObj invalidateCellShapes];
+    }];
+    
+    NSMutableArray * rightSelCells = [NSMutableArray new];
+    cnt = 1;
+    FSCalendarCell *rightCell;
+    rightCell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row+6
+                                                                                           inSection:indexPath.section]];
+    while (rightCell.isSelected) {
+        [rightSelCells addObject:rightCell];
+        cnt++;
+        rightCell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row+cnt*6
+                                                                                               inSection:indexPath.section]];
+    }
+    
+    [rightSelCells enumerateObjectsUsingBlock:^(FSCalendarCell* rightCellObj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == [rightSelCells count]-1) {
+            rightCellObj.cornerRectStyle = (UIRectCornerBottomRight | UIRectCornerTopRight);
+        }else
+            rightCellObj.cornerRectStyle = 0;
+        
+        [rightCellObj invalidateCellShapes];
+    }];
+    
+    
+    if ([leftSelCells count] && [rightSelCells count]==0) {
+        cornerStyle |= (UIRectCornerTopRight | UIRectCornerBottomRight);
+    }
+
+    if ([leftSelCells count]==0 && [rightSelCells count]) {
+        cornerStyle |= (UIRectCornerTopLeft | UIRectCornerBottomLeft);
+    }
+    
+    if ([leftSelCells count]==0 && [rightSelCells count]==0) {
+        cornerStyle = UIRectCornerAllCorners;
+    }
+    
     FSCalendarCell *cell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    cell.cornerRectStyle = cornerStyle;
     cell.dateIsSelected = YES;
     [cell performSelecting];
     NSDate *selectedDate = [self dateForIndexPath:indexPath];

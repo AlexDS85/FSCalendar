@@ -44,6 +44,7 @@
 @property (strong, nonatomic) UIColor *preferredBorderDefaultColor;
 @property (strong, nonatomic) UIColor *preferredBorderSelectionColor;
 @property (assign, nonatomic) FSCalendarCellShape preferredCellShape;
+@property (assign, nonatomic) UIRectCorner cornerRectStyle;
 
 - (void)invalidateTitleFont;
 - (void)invalidateSubtitleFont;
