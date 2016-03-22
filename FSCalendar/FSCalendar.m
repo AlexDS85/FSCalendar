@@ -1596,12 +1596,31 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
         NSInteger lessIndex = [set indexLessThanIndex:components.day];
         NSInteger moreIndex = [set indexGreaterThanIndex:components.day];
         
-        if (lessIndex == NSNotFound && moreIndex != NSNotFound) {
-            cell.cornerRectStyle = UIRectCornerBottomLeft | UIRectCornerTopLeft;
-        }
-        if (lessIndex != NSNotFound && moreIndex == NSNotFound) {
-            cell.cornerRectStyle = UIRectCornerBottomRight | UIRectCornerTopRight;
-        }
+        cell.cornerRectStyle = 0;
+        
+        [set enumerateRangesUsingBlock:^(NSRange range, BOOL * _Nonnull stop) {
+            if(range.location <= components.day && range.location +range.length >= components.day)
+            {//in this range
+                if (range.location == components.day) {
+                    cell.cornerRectStyle = UIRectCornerBottomLeft | UIRectCornerTopLeft;
+                }
+                if (range.location +range.length -1 == components.day) {
+                    cell.cornerRectStyle = UIRectCornerBottomRight | UIRectCornerTopRight;
+                }
+                *stop = YES;
+            }
+        }];
+        
+//        if (moreIndex -1 == components.day) {
+//            
+//        }
+//        if (lessIndex +1 == components.day) {
+//            cell.cornerRectStyle = UIRectCornerBottomRight | UIRectCornerTopRight;
+//        }
+        
+//        if (moreIndex == lessIndex == NSNotFound) {
+//            cell.cornerRectStyle =  UIRectCornerAllCorners;
+//        }
         
     }
     cell.dateIsToday = [self isDateInToday:cell.date];

@@ -37,7 +37,7 @@
     [calendar selectDate:[NSDate date]];
     [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
     [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*2]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*3]];
+   // [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*3]];
     [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*4]];
     [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*5]];
     
