@@ -508,14 +508,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     NSLog(@"selected indexPath:section:%d, row:%d",indexPath.section,indexPath.row);
     
     UIRectCorner cornerStyle;
-//    FSCalendarCell *rightCell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row+6
-//                                                                                                            inSection:indexPath.section]];
-//    if (rightCell.isSelected) {
-//        NSLog(@"right is selected aswell");
-//        rightCell.cornerRectStyle = (UIRectCornerBottomRight | UIRectCornerTopRight);
-//        [rightCell invalidateCellShapes];
-//        
-//    }
+
     
     NSMutableArray * leftSelCells = [NSMutableArray new];
     int cnt = 1;
@@ -571,9 +564,10 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     if ([leftSelCells count]==0 && [rightSelCells count]==0) {
         cornerStyle = UIRectCornerAllCorners;
     }
-    
+ 
     FSCalendarCell *cell = (FSCalendarCell *)[collectionView cellForItemAtIndexPath:indexPath];
     cell.cornerRectStyle = cornerStyle;
+
     cell.dateIsSelected = YES;
     [cell performSelecting];
     NSDate *selectedDate = [self dateForIndexPath:indexPath];

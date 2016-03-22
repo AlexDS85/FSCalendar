@@ -78,6 +78,7 @@
         _weekdayFontName = [UIFont systemFontOfSize:1].fontName;
         _headerTitleFontName = [UIFont systemFontOfSize:1].fontName;
         
+        _headerBackgroundColor = [UIColor colorWithRed:1.f/10.f green:1.f/20.f blue:1.f/32.f alpha:1];
         _headerTitleColor = FSCalendarStandardTitleTextColor;
         _headerDateFormat = @"MMMM yyyy";
         _headerMinimumDissolvedAlpha = 0.2;

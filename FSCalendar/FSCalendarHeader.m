@@ -48,7 +48,7 @@
     _scrollEnabled = YES;
     _needsAdjustingMonthPosition = YES;
     _needsAdjustingViewFrame = YES;
-    
+    self.backgroundColor = [UIColor colorWithRed:1.f/10.f green:1.f/20.f blue:1.f/32.f alpha:1];//self.appearance.headerBackgroundColor;
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
     collectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     collectionViewLayout.minimumInteritemSpacing = 0;

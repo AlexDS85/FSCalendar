@@ -48,6 +48,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
 @property (strong, nonatomic) UIColor  *eventColor;
 @property (strong, nonatomic) UIColor  *weekdayTextColor;
 
+@property (strong, nonatomic) UIColor  *headerBackgroundColor;
 @property (strong, nonatomic) UIColor  *headerTitleColor;
 @property (strong, nonatomic) NSString *headerDateFormat;
 @property (assign, nonatomic) CGFloat  headerMinimumDissolvedAlpha;
