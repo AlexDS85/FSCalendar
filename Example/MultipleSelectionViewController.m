@@ -33,6 +33,14 @@
     calendar.allowsMultipleSelection = YES;
     calendar.appearance.cellShape = FSCalendarCellShapeRoundedRect;
     
+    
+    [calendar selectDate:[NSDate date]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*2]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*3]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*4]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*5]];
+    
     [self.view addSubview:calendar];
     self.calendar = calendar;
 }

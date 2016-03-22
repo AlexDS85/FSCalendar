@@ -56,6 +56,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     NSDate *_minimumDate;
     NSDate *_maximumDate;
 }
+@property (strong, nonatomic) NSMutableDictionary        *selectedRanges;
 @property (strong, nonatomic) NSMutableArray             *weekdays;
 @property (strong, nonatomic) NSMapTable                 *stickyHeaderMapTable;
 
@@ -1589,6 +1590,26 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     cell.numberOfEvents = [self numberOfEventsForDate:cell.date];
     cell.subtitle  = [self subtitleForDate:cell.date];
     cell.dateIsSelected = [_selectedDates containsObject:cell.date];
+    if (cell.dateIsSelected) {
+        NSLog(@"Selected dates:%@ and selected ranges:%@",_selectedDates,_selectedRanges);
+        NSCalendar *calendar = [NSCalendar currentCalendar];
+        NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitWeekday
+                                                   fromDate:cell.date];
+        [components setWeekday:2];
+        [components setWeekOfYear:[components weekOfYear]];
+
+        NSIndexSet * set = _selectedRanges[@(components.year)][@(components.month)];
+        NSInteger lessIndex = [set indexLessThanIndex:components.day];
+        NSInteger moreIndex = [set indexGreaterThanIndex:components.day];
+        
+        if (lessIndex == NSNotFound && moreIndex != NSNotFound) {
+            cell.cornerRectStyle = UIRectCornerBottomLeft | UIRectCornerTopLeft;
+        }
+        if (lessIndex != NSNotFound && moreIndex == NSNotFound) {
+            cell.cornerRectStyle = UIRectCornerBottomRight | UIRectCornerTopRight;
+        }
+        
+    }
     cell.dateIsToday = [self isDateInToday:cell.date];
     switch (_scope) {
         case FSCalendarScopeMonth: {
@@ -1668,7 +1689,58 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     }
     if (![_selectedDates containsObject:date]) {
         [_selectedDates addObject:date];
+        //add this date to range
+        
+        [self addDate:date];
+        
+        
+        
     }
+}
+
+- (void)addDate:(NSDate *)date
+{
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitWeekday
+                                               fromDate:date];
+    [components setWeekday:2]; // 1 == Sunday, 7 == Saturday
+    [components setWeekOfYear:[components weekOfYear]];
+    if (_selectedRanges==nil) {
+        _selectedRanges = [NSMutableDictionary new];
+    }
+    
+    
+    
+
+    
+    if(_selectedRanges[@(components.year)])
+    {
+        NSMutableDictionary * monthDic = _selectedRanges[@(components.year)];
+        if(monthDic[@(components.month)])
+        {
+            NSMutableIndexSet *daysSet = monthDic[@(components.month)];
+            [daysSet addIndex:components.day];
+            _selectedRanges[@(components.year)][@(components.month)] = daysSet;
+        }else
+        {
+            
+        }
+        
+       
+    }else
+    {
+        
+        NSMutableDictionary * monthDicForYear = [NSMutableDictionary new];
+        
+        NSMutableIndexSet *daysSet = [NSMutableIndexSet new];
+        [daysSet addIndex:components.day];
+        
+        monthDicForYear[@(components.month)] = daysSet;
+        _selectedRanges[@(components.year)] = monthDicForYear;
+        
+
+    }
+    NSLog(@"Range:%@",_selectedRanges);
 }
 
 - (NSArray *)visibleStickyHeaders
