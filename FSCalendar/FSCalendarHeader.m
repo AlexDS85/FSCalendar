@@ -48,7 +48,7 @@
     _scrollEnabled = YES;
     _needsAdjustingMonthPosition = YES;
     _needsAdjustingViewFrame = YES;
-    self.backgroundColor = [UIColor colorWithRed:1.f/10.f green:1.f/20.f blue:1.f/32.f alpha:1];//self.appearance.headerBackgroundColor;
+    self.backgroundColor = [UIColor redColor];//[UIColor colorWithRed:1.f/10.f green:1.f/20.f blue:1.f/32.f alpha:1];//self.appearance.headerBackgroundColor;
     UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
     collectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     collectionViewLayout.minimumInteritemSpacing = 0;
@@ -73,7 +73,7 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
+    self.backgroundColor = self.appearance.headerBackgroundColor;
     if (_needsAdjustingViewFrame) {
         _needsAdjustingViewFrame = NO;
         _collectionViewLayout.itemSize = CGSizeMake(1, 1);

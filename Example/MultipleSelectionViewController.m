@@ -32,7 +32,7 @@
     calendar.backgroundColor = [UIColor whiteColor];
     calendar.allowsMultipleSelection = YES;
     calendar.appearance.cellShape = FSCalendarCellShapeRoundedRect;
-    
+    calendar.appearance.headerBackgroundColor = [UIColor greenColor];
     
     [calendar selectDate:[NSDate date]];
     [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];

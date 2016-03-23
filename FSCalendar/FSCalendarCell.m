@@ -5,7 +5,7 @@
 //  Created by Wenchao Ding on 12/3/15.
 //
 //
-
+#define xInset 18
 #import "FSCalendarCell.h"
 #import "FSCalendar.h"
 #import "UIView+FSExtension.h"
@@ -207,7 +207,7 @@
             }break;
                 case FSCalendarCellShapeRoundedRect:
             {
-                path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -11, 0)
+                path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds,-xInset, 0)
 
                                              byRoundingCorners:self.cornerRectStyle
                                                    cornerRadii:CGSizeMake(10,10)].CGPath;
@@ -323,7 +323,7 @@
         case FSCalendarCellShapeRoundedRect:
         {
 
-            path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -11, 0)
+            path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -xInset, 0)
                                          byRoundingCorners:self.cornerRectStyle
                                                cornerRadii:CGSizeMake(10,10)].CGPath;
         }break;

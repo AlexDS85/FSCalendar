@@ -467,6 +467,15 @@
     }
 }
 
+- (void)setHeaderBackgroundColor:(UIColor *)color
+{
+    if(![_headerBackgroundColor isEqual:color])
+    {
+        _headerBackgroundColor = color;
+        [self invalidateHeadeBackgroundColor];
+    }
+}
+
 - (void)setHeaderTitleColor:(UIColor *)color
 {
     if (![_headerTitleColor isEqual:color]) {
@@ -653,6 +662,10 @@
     [_calendar.visibleStickyHeaders makeObjectsPerformSelector:_cmd];
 }
 
+- (void)invalidateHeadeBackgroundColor
+{
+    _calendar.header.backgroundColor = self.headerBackgroundColor;
+}
 @end
 
 
