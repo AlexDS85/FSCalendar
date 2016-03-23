@@ -65,6 +65,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 @property (strong, nonatomic) NSDateComponents *components;
 @property (strong, nonatomic) NSTimeZone *timeZone;
 
+
 @property (weak  , nonatomic) UIView                     *contentView;
 @property (weak  , nonatomic) UIView                     *daysContainer;
 @property (weak  , nonatomic) CAShapeLayer               *maskLayer;
@@ -91,6 +92,8 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 @property (readonly, nonatomic) BOOL hasValidateVisibleLayout;
 @property (readonly, nonatomic) NSArray *visibleStickyHeaders;
 @property (readonly, nonatomic) FSCalendarOrientation currentCalendarOrientation;
+
+@property (strong, nonatomic) NSLayoutConstraint * weekDayBkgViewHeigthConstraint;
 
 @property (readonly, nonatomic) id<FSCalendarDelegateAppearance> delegateAppearance;
 
@@ -316,6 +319,8 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
                                             weekdayWidth,
                                             weekdayHeight);
         }];
+        _weekDayBkgViewHeigthConstraint.constant = weekdayHeight;
+        [_contentView addConstraint:_weekDayBkgViewHeigthConstraint];
 
         _deliver.frame = CGRectMake(_header.fs_left, _header.fs_top, _header.fs_width, headerHeight+weekdayHeight);
         _deliver.hidden = _header.hidden;
@@ -1496,6 +1501,37 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
         }
         
         if (!_weekdays.count) {
+            if(YES)
+            {
+                _weekDaysView = [UIView new];
+                _weekDaysView.backgroundColor = self.weekdayBackgroundColor;
+                [_contentView addSubview:_weekDaysView];
+                _weekDaysView.translatesAutoresizingMaskIntoConstraints = NO;
+                _weekDaysView.autoresizingMask = UIViewAutoresizingNone;
+                [_contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(-2)-[view]-(-2)-|"
+                                                                                   options:0
+                                                                                   metrics:nil
+                                                                                      views:@{@"view":_weekDaysView}]];
+                
+                [_contentView addConstraint:[NSLayoutConstraint constraintWithItem:_weekDaysView
+                                                                        attribute:NSLayoutAttributeTop
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:self.header
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                       multiplier:1
+                                                                         constant:0]];
+                self.weekDayBkgViewHeigthConstraint = [NSLayoutConstraint constraintWithItem:_weekDaysView
+                                                                                   attribute:NSLayoutAttributeHeight
+                                                                                   relatedBy:NSLayoutRelationEqual
+                                                                                      toItem:nil
+                                                                                   attribute:NSLayoutAttributeNotAnAttribute
+                                                                                  multiplier:1
+                                                                                    constant:self.weekdayHeight];
+                
+            }
+            
+            
+            
             NSArray *weekSymbols = self.calendar.shortStandaloneWeekdaySymbols;
             _weekdays = [NSMutableArray arrayWithCapacity:weekSymbols.count];
             UIFont *weekdayFont = _appearance.preferredWeekdayFont;
@@ -1549,6 +1585,12 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     if (self.visibleStickyHeaders.count) {
         [self.visibleStickyHeaders makeObjectsPerformSelector:_cmd];
     }
+}
+
+- (void)setWeekdayBackgroundColor:(UIColor *)weekdayBackgroundColor
+{
+    _weekdayBackgroundColor = weekdayBackgroundColor;
+    self.weekDaysView.backgroundColor = _weekdayBackgroundColor;
 }
 
 - (void)invalidateHeaders

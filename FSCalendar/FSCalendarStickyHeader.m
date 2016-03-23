@@ -57,6 +57,9 @@
             [weekdayLabels addObject:label];
         }
         self.weekdayLabels = weekdayLabels.copy;
+        
+        
+     
     }
     return self;
 }

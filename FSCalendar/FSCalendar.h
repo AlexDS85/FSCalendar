@@ -106,6 +106,9 @@ IB_DESIGNABLE
 @property (assign, nonatomic) IBInspectable BOOL focusOnSingleSelectedDate;
 @property (assign, nonatomic) IBInspectable BOOL showsPlaceholders;
 
+@property (strong, nonatomic) UIColor *weekdayBackgroundColor;
+@property (strong, nonatomic) UIView *weekDaysView;
+
 @property (readonly, nonatomic) FSCalendarAppearance *appearance;
 @property (readonly, nonatomic) NSDate *minimumDate;
 @property (readonly, nonatomic) NSDate *maximumDate;

@@ -33,6 +33,11 @@
     calendar.allowsMultipleSelection = YES;
     calendar.appearance.cellShape = FSCalendarCellShapeRoundedRect;
     calendar.appearance.headerBackgroundColor = [UIColor greenColor];
+    calendar.appearance.caseOptions = FSCalendarCaseOptionsWeekdayUsesSingleUpperCase;
+    calendar.weekdayHeight = 50;
+    calendar.weekdayBackgroundColor = [UIColor redColor];;
+    calendar.weekDaysView.layer.borderColor = [UIColor brownColor].CGColor;
+    calendar.weekDaysView.layer.borderWidth =1;
     
     [calendar selectDate:[NSDate date]];
     [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
