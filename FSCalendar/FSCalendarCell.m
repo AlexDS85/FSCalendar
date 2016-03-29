@@ -5,12 +5,14 @@
 //  Created by Wenchao Ding on 12/3/15.
 //
 //
-#define xInset 18
+#define xInset 15
+
 #import "FSCalendarCell.h"
 #import "FSCalendar.h"
 #import "UIView+FSExtension.h"
 #import "FSCalendarDynamicHeader.h"
 #import "FSCalendarConstance.h"
+#import "NSDate+FSExtension.h"
 
 @interface FSCalendarCell ()
 
@@ -193,33 +195,7 @@
         _backgroundLayer.hidden = shouldHiddenBackgroundLayer;
     }
     if (!shouldHiddenBackgroundLayer) {
-        
-        CGPathRef path;
-        switch (self.cellShape) {
-            case FSCalendarCellShapeCircle:
-                path = [UIBezierPath bezierPathWithOvalInRect:_backgroundLayer.bounds].CGPath ;
-                
-                break;
-                
-            case FSCalendarCellShapeRectangle:
-            {
-                path = [UIBezierPath bezierPathWithRect:_backgroundLayer.bounds].CGPath;
-            }break;
-                case FSCalendarCellShapeRoundedRect:
-            {
-                path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds,-xInset, 0)
-
-                                             byRoundingCorners:self.cornerRectStyle
-                                                   cornerRadii:CGSizeMake(10,10)].CGPath;
-            }break;
-            default:
-                break;
-        }
-        
-        if (!CGPathEqualToPath(_backgroundLayer.path,path)) {
-            _backgroundLayer.path = path;
-        }
-        
+        [self invalidateCellShapes];
         CGColorRef backgroundColor = self.colorForBackgroundLayer.CGColor;
         if (!CGColorEqualToColor(_backgroundLayer.fillColor, backgroundColor)) {
             _backgroundLayer.fillColor = backgroundColor;
@@ -305,10 +281,6 @@
 
 - (void)invalidateCellShapes
 {
-//    CGPathRef path = self.cellShape == FSCalendarCellShapeCircle ?
-//    [UIBezierPath bezierPathWithOvalInRect:_backgroundLayer.bounds].CGPath :
-//    [UIBezierPath bezierPathWithRect:_backgroundLayer.bounds].CGPath;
-    
     CGPathRef path;
     switch (self.cellShape) {
         case FSCalendarCellShapeCircle:
@@ -322,16 +294,126 @@
         }break;
         case FSCalendarCellShapeRoundedRect:
         {
-
+            
             path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -xInset, 0)
                                          byRoundingCorners:self.cornerRectStyle
                                                cornerRadii:CGSizeMake(10,10)].CGPath;
+            
+            if(self.dateIsSelected)
+            {
+            if([self.date fs_weekday] == 7 )
+            {
+                
+                
+                
+                path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x -xInset,
+                                                                          _backgroundLayer.bounds.origin.y ,
+                                                                          _backgroundLayer.bounds.size.width + 1.5*xInset,
+                                                                          _backgroundLayer.bounds.size.height)
+                                             byRoundingCorners:self.cornerRectStyle
+                                                   cornerRadii:CGSizeMake(10,10)].CGPath;
+               
+            }else
+                if([self.date fs_weekday] == 1)
+                {
+                    BOOL leftEdge = [self isLeftEdgeCell];
+                    BOOL rightEdge = [self isRightEdgeCell];
+                    
+                    path = [UIBezierPath bezierPathWithRoundedRect:_backgroundLayer.bounds
+                                                 byRoundingCorners:self.cornerRectStyle
+                                                       cornerRadii:CGSizeMake(10,10)].CGPath;
+                    
+
+                    if (leftEdge || _calendar.appearance.allowInterruptSelections) {
+                        path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x - 0.5*xInset ,
+                                                                                  _backgroundLayer.bounds.origin.y,
+                                                                                  _backgroundLayer.bounds.size.width+1.5*xInset ,
+                                                                                  _backgroundLayer.bounds.size.height)
+                                                     byRoundingCorners:self.cornerRectStyle
+                                                           cornerRadii:CGSizeMake(10,10)].CGPath;
+                    }
+                    
+                    if(rightEdge)
+                    {
+                        if (_calendar.appearance.allowInterruptSelections) {
+                            path = [UIBezierPath bezierPathWithRoundedRect:_backgroundLayer.bounds
+                                                         byRoundingCorners:self.cornerRectStyle
+                                                               cornerRadii:CGSizeMake(10,10)].CGPath;
+                        }else
+                        {
+                            path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x - xInset ,
+                                                                                      _backgroundLayer.bounds.origin.y,
+                                                                                      _backgroundLayer.bounds.size.width+2*xInset ,
+                                                                                      _backgroundLayer.bounds.size.height)
+                                                         byRoundingCorners:self.cornerRectStyle
+                                                               cornerRadii:CGSizeMake(10,10)].CGPath;
+                        }
+                        
+                    }
+                    if (leftEdge && rightEdge) {
+                        path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x  ,
+                                                                                  _backgroundLayer.bounds.origin.y,
+                                                                                  _backgroundLayer.bounds.size.width ,
+                                                                                  _backgroundLayer.bounds.size.height)
+                                                     byRoundingCorners:self.cornerRectStyle
+                                                           cornerRadii:CGSizeMake(10,10)].CGPath;
+                    }
+                }
+                
+               
+                
+                
+            }
+            else
+            {
+                
+                path = [UIBezierPath bezierPathWithRoundedRect:_backgroundLayer.bounds
+                                             byRoundingCorners:self.cornerRectStyle
+                                                   cornerRadii:CGSizeMake(10,10)].CGPath;
+            }
+            
         }break;
         default:
             break;
     }
+    
+    if (!CGPathEqualToPath(_backgroundLayer.path,path)) {
+        _backgroundLayer.path = path;
+    }
+}
 
-    _backgroundLayer.path = path;
+- (BOOL)isLeftEdgeCell
+{
+    __block BOOL isEdgeCell = NO;
+    NSInteger daysPassed = [self.date fs_daysFrom:[NSDate dateWithTimeIntervalSince1970:0]];
+    [_calendar.selectedRanges enumerateRangesUsingBlock:^(NSRange range, BOOL * _Nonnull stop) {
+       
+            if(range.location <= daysPassed && range.location +range.length >= daysPassed)
+            {//in this range
+                if (range.location == daysPassed) {
+                    isEdgeCell = YES;
+                }
+                *stop = YES;
+            }
+        
+    }];
+    return isEdgeCell;
+}
+- (BOOL)isRightEdgeCell
+{
+    __block BOOL isEdgeCell = NO;
+    NSInteger daysPassed = [self.date fs_daysFrom:[NSDate dateWithTimeIntervalSince1970:0]];
+    [_calendar.selectedRanges enumerateRangesUsingBlock:^(NSRange range, BOOL * _Nonnull stop) {
+        
+        if(range.location <= daysPassed && range.location +range.length >= daysPassed)
+        {//in this range
+            if (range.location +range.length -1 == daysPassed) {
+                isEdgeCell = YES;
+            }
+            *stop = YES;
+        }
+    }];
+    return isEdgeCell;
 }
 
 - (void)invalidateImage

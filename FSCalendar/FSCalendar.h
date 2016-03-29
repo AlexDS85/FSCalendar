@@ -115,6 +115,7 @@ IB_DESIGNABLE
 
 @property (readonly, nonatomic) NSDate *selectedDate;
 @property (readonly, nonatomic) NSArray *selectedDates;
+@property (strong, nonatomic) NSMutableIndexSet        *selectedRanges;
 
 - (void)reloadData;
 - (CGSize)sizeThatFits:(CGSize)size;

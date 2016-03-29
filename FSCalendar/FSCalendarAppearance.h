@@ -76,6 +76,8 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
 @property (assign, nonatomic) FSCalendarCaseOptions caseOptions;
 @property (assign, nonatomic) BOOL adjustsFontSizeToFitContentSize;
 
+@property (assign, nonatomic) BOOL allowInterruptSelections;
+
 #if TARGET_INTERFACE_BUILDER
 
 // For preview only

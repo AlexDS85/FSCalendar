@@ -38,7 +38,7 @@
     calendar.weekdayBackgroundColor = [UIColor redColor];;
     calendar.weekDaysView.layer.borderColor = [UIColor brownColor].CGColor;
     calendar.weekDaysView.layer.borderWidth =1;
-    
+    calendar.appearance.allowInterruptSelections = YES;
  //   [calendar selectDate:[NSDate date]];
 //    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
 //    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*2]];

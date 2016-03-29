@@ -57,7 +57,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     NSDate *_minimumDate;
     NSDate *_maximumDate;
 }
-@property (strong, nonatomic) NSMutableIndexSet        *selectedRanges;
+
 @property (strong, nonatomic) NSMutableArray             *weekdays;
 @property (strong, nonatomic) NSMapTable                 *stickyHeaderMapTable;
 
@@ -511,7 +511,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"selected indexPath:section:%d, row:%d",indexPath.section,indexPath.row);
+  //  NSLog(@"selected indexPath:section:%d, row:%d",indexPath.section,indexPath.row);
     
     UIRectCorner cornerStyle;
 
@@ -1629,20 +1629,11 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     cell.dateIsSelected = [_selectedDates containsObject:cell.date];
     if (cell.dateIsSelected) {
         NSLog(@"Selected dates:%@ and selected ranges:%@",_selectedDates,_selectedRanges);
-//        NSCalendar *calendar = [NSCalendar currentCalendar];
-//        NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitWeekday
-//                                                   fromDate:cell.date];
-//        [components setWeekday:2];
-//        [components setWeekOfYear:[components weekOfYear]];
-        
         NSInteger daysPassed = [cell.date fs_daysFrom:[NSDate dateWithTimeIntervalSince1970:0]];
-
-//        NSIndexSet * set = _selectedRanges[@(components.year)][@(components.month)];
-//        NSInteger lessIndex = [set indexLessThanIndex:components.day];
-//        NSInteger moreIndex = [set indexGreaterThanIndex:components.day];
-//        
         cell.cornerRectStyle = 0;
         
+        int weekday = [cell.date fs_weekday];
+
         [_selectedRanges enumerateRangesUsingBlock:^(NSRange range, BOOL * _Nonnull stop) {
             if(range.location <= daysPassed && range.location +range.length >= daysPassed)
             {//in this range
@@ -1656,17 +1647,17 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
             }
         }];
         
-//        if (moreIndex -1 == components.day) {
-//            
-//        }
-//        if (lessIndex +1 == components.day) {
-//            cell.cornerRectStyle = UIRectCornerBottomRight | UIRectCornerTopRight;
-//        }
+
         
-//        if (moreIndex == lessIndex == NSNotFound) {
-//            cell.cornerRectStyle =  UIRectCornerAllCorners;
-//        }
- 
+            if(weekday == 1)
+            {
+                cell.cornerRectStyle |= UIRectCornerBottomLeft | UIRectCornerTopLeft;
+            }else
+                if (weekday == 7) {
+                    cell.cornerRectStyle |= UIRectCornerBottomRight | UIRectCornerTopRight;
+                }
+        
+        
     }
     cell.dateIsToday = [self isDateInToday:cell.date];
     switch (_scope) {
