@@ -39,12 +39,14 @@
     calendar.weekDaysView.layer.borderColor = [UIColor brownColor].CGColor;
     calendar.weekDaysView.layer.borderWidth =1;
     
-    [calendar selectDate:[NSDate date]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*2]];
+ //   [calendar selectDate:[NSDate date]];
+//    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
+//    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*2]];
    // [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*3]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*4]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*5]];
+//    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*4]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:2*3600*24]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3*3600*24]];
+//    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:7*3600*24]];
     
     [self.view addSubview:calendar];
     self.calendar = calendar;
@@ -53,7 +55,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [_calendar selectDate:[_calendar dateByAddingDays:1 toDate:[NSDate date]]];
+   // [_calendar selectDate:[_calendar dateByAddingDays:1 toDate:[NSDate date]]];
     
 #if 0
     FSCalendarTestSelectDate
@@ -108,9 +110,9 @@
 
 - (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderDefaultColorForDate:(NSDate *)date
 {
-    if ([@[@17,@18,@19] containsObject:@([calendar dayOfDate:date])]) {
-        return [UIColor magentaColor];
-    }
+//    if ([@[@17,@18,@19] containsObject:@([calendar dayOfDate:date])]) {
+//        return [UIColor magentaColor];
+//    }
     return appearance.borderDefaultColor;
 }
 

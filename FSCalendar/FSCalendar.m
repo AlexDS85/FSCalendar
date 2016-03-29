@@ -17,6 +17,7 @@
 #import "NSString+FSExtension.h"
 #import "FSCalendarDynamicHeader.h"
 #import "FSCalendarCollectionView.h"
+#import "NSDate+FSExtension.h"
 
 typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     FSCalendarOrientationLandscape,
@@ -56,7 +57,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     NSDate *_minimumDate;
     NSDate *_maximumDate;
 }
-@property (strong, nonatomic) NSMutableDictionary        *selectedRanges;
+@property (strong, nonatomic) NSMutableIndexSet        *selectedRanges;
 @property (strong, nonatomic) NSMutableArray             *weekdays;
 @property (strong, nonatomic) NSMapTable                 *stickyHeaderMapTable;
 
@@ -1628,26 +1629,28 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     cell.dateIsSelected = [_selectedDates containsObject:cell.date];
     if (cell.dateIsSelected) {
         NSLog(@"Selected dates:%@ and selected ranges:%@",_selectedDates,_selectedRanges);
-        NSCalendar *calendar = [NSCalendar currentCalendar];
-        NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitWeekday
-                                                   fromDate:cell.date];
-        [components setWeekday:2];
-        [components setWeekOfYear:[components weekOfYear]];
-
-        NSIndexSet * set = _selectedRanges[@(components.year)][@(components.month)];
-        NSInteger lessIndex = [set indexLessThanIndex:components.day];
-        NSInteger moreIndex = [set indexGreaterThanIndex:components.day];
+//        NSCalendar *calendar = [NSCalendar currentCalendar];
+//        NSDateComponents *components = [calendar components:NSCalendarUnitDay|NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitWeekday
+//                                                   fromDate:cell.date];
+//        [components setWeekday:2];
+//        [components setWeekOfYear:[components weekOfYear]];
         
+        NSInteger daysPassed = [cell.date fs_daysFrom:[NSDate dateWithTimeIntervalSince1970:0]];
+
+//        NSIndexSet * set = _selectedRanges[@(components.year)][@(components.month)];
+//        NSInteger lessIndex = [set indexLessThanIndex:components.day];
+//        NSInteger moreIndex = [set indexGreaterThanIndex:components.day];
+//        
         cell.cornerRectStyle = 0;
         
-        [set enumerateRangesUsingBlock:^(NSRange range, BOOL * _Nonnull stop) {
-            if(range.location <= components.day && range.location +range.length >= components.day)
+        [_selectedRanges enumerateRangesUsingBlock:^(NSRange range, BOOL * _Nonnull stop) {
+            if(range.location <= daysPassed && range.location +range.length >= daysPassed)
             {//in this range
-                if (range.location == components.day) {
-                    cell.cornerRectStyle = UIRectCornerBottomLeft | UIRectCornerTopLeft;
+                if (range.location == daysPassed) {
+                    cell.cornerRectStyle |= UIRectCornerBottomLeft | UIRectCornerTopLeft;
                 }
-                if (range.location +range.length -1 == components.day) {
-                    cell.cornerRectStyle = UIRectCornerBottomRight | UIRectCornerTopRight;
+                if (range.location +range.length -1 == daysPassed) {
+                    cell.cornerRectStyle |= UIRectCornerBottomRight | UIRectCornerTopRight;
                 }
                 *stop = YES;
             }
@@ -1663,7 +1666,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 //        if (moreIndex == lessIndex == NSNotFound) {
 //            cell.cornerRectStyle =  UIRectCornerAllCorners;
 //        }
-        
+ 
     }
     cell.dateIsToday = [self isDateInToday:cell.date];
     switch (_scope) {
@@ -1753,6 +1756,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     }
 }
 
+
 - (void)addDate:(NSDate *)date
 {
     NSCalendar *calendar = [NSCalendar currentCalendar];
@@ -1761,14 +1765,22 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     [components setWeekday:2]; // 1 == Sunday, 7 == Saturday
     [components setWeekOfYear:[components weekOfYear]];
     if (_selectedRanges==nil) {
-        _selectedRanges = [NSMutableDictionary new];
+        _selectedRanges = [NSMutableIndexSet new];
     }
     
     
     
-
+//    NSDateComponents *difference = [calendar components:NSCalendarUnitDay
+//                                               fromDate:[NSDate dateWithTimeIntervalSince1970:0]
+//                                                 toDate:date
+//                                                options:0];
     
-    if(_selectedRanges[@(components.year)])
+    NSInteger days = [date fs_daysFrom:[NSDate dateWithTimeIntervalSince1970:0]];
+    
+    [_selectedRanges addIndex:days];
+  
+    /*
+     if(_selectedRanges[@(components.year)])
     {
         NSMutableDictionary * monthDic = _selectedRanges[@(components.year)];
         if(monthDic[@(components.month)])
@@ -1778,7 +1790,12 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
             _selectedRanges[@(components.year)][@(components.month)] = daysSet;
         }else
         {
+          //  NSMutableDictionary * monthDicForYear = [NSMutableDictionary new];
+            NSMutableIndexSet *daysSet = [NSMutableIndexSet new];
+            [daysSet addIndex:components.day];
             
+            monthDic[@(components.month)] = daysSet;
+          //  _selectedRanges[@(components.year)] = monthDicForYear;
         }
         
        
@@ -1795,6 +1812,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
         
 
     }
+    */
     NSLog(@"Range:%@",_selectedRanges);
 }
 
