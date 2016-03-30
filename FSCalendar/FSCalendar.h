@@ -117,6 +117,7 @@ IB_DESIGNABLE
 @property (readonly, nonatomic) NSArray *selectedDates;
 @property (strong, nonatomic) NSMutableIndexSet        *selectedRanges;
 
+- (NSInteger)lastWeekDay;
 - (void)reloadData;
 - (CGSize)sizeThatFits:(CGSize)size;
 

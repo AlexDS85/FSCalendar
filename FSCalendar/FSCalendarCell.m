@@ -301,7 +301,8 @@
             
             if(self.dateIsSelected)
             {
-            if([self.date fs_weekday] == 7 )
+                NSLog(@"Date:%@ has weekday=%d, lastweekday=%d",self.date,[self.date fs_weekday],[_calendar lastWeekDay] );
+            if([self.date fs_weekday] == [_calendar lastWeekDay])
             {
                 
                 
@@ -314,7 +315,7 @@
                                                    cornerRadii:CGSizeMake(10,10)].CGPath;
                
             }else
-                if([self.date fs_weekday] == 1)
+                if([self.date fs_weekday] == _calendar.firstWeekday)
                 {
                     BOOL leftEdge = [self isLeftEdgeCell];
                     BOOL rightEdge = [self isRightEdgeCell];

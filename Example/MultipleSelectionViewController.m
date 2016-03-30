@@ -35,6 +35,7 @@
     calendar.appearance.headerBackgroundColor = [UIColor greenColor];
     calendar.appearance.caseOptions = FSCalendarCaseOptionsWeekdayUsesSingleUpperCase;
     calendar.weekdayHeight = 50;
+    calendar.firstWeekday = 2;
     calendar.weekdayBackgroundColor = [UIColor redColor];;
     calendar.weekDaysView.layer.borderColor = [UIColor brownColor].CGColor;
     calendar.weekDaysView.layer.borderWidth =1;

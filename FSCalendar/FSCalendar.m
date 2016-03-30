@@ -1090,6 +1090,11 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 
 #pragma mark - Public
 
+- (NSInteger)lastWeekDay
+{
+    return (self.firstWeekday)>1?(self.firstWeekday-1):7;
+}
+
 - (void)reloadData
 {
     NSDate *minimumDate = self.minimumDateForCalendar;
@@ -1649,11 +1654,11 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
         
 
         
-            if(weekday == 1)
+            if(weekday == self.firstWeekday)
             {
                 cell.cornerRectStyle |= UIRectCornerBottomLeft | UIRectCornerTopLeft;
             }else
-                if (weekday == 7) {
+                if (weekday == [self lastWeekDay]) {
                     cell.cornerRectStyle |= UIRectCornerBottomRight | UIRectCornerTopRight;
                 }
         
