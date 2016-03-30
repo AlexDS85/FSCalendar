@@ -575,12 +575,13 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     cell.cornerRectStyle = cornerStyle;
 
     cell.dateIsSelected = YES;
-    [cell performSelecting];
+    
     NSDate *selectedDate = [self dateForIndexPath:indexPath];
     if (!_supressEvent) {
         [self didSelectDate:selectedDate];
     }
     [self selectCounterpartDate:selectedDate];
+    [cell performSelecting];
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath

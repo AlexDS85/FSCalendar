@@ -75,7 +75,7 @@ typedef NS_OPTIONS(NSUInteger, FSCalendarCaseOptions) {
 @property (assign, nonatomic) FSCalendarCellShape cellShape;
 @property (assign, nonatomic) FSCalendarCaseOptions caseOptions;
 @property (assign, nonatomic) BOOL adjustsFontSizeToFitContentSize;
-
+@property (assign, nonatomic) float selectionPart;
 @property (assign, nonatomic) BOOL allowInterruptSelections;
 
 #if TARGET_INTERFACE_BUILDER

@@ -7,6 +7,8 @@
 //
 #define xInset 15
 
+
+
 #import "FSCalendarCell.h"
 #import "FSCalendar.h"
 #import "UIView+FSExtension.h"
@@ -72,6 +74,9 @@
         self.clipsToBounds = NO;
         self.contentView.clipsToBounds = NO;
         
+        
+//        self.contentView.layer.borderColor = [UIColor grayColor].CGColor;
+//        self.contentView.layer.borderWidth = 1;
     }
     return self;
 }
@@ -292,97 +297,174 @@
         {
             path = [UIBezierPath bezierPathWithRect:_backgroundLayer.bounds].CGPath;
         }break;
+            
         case FSCalendarCellShapeRoundedRect:
         {
             
-            path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_backgroundLayer.bounds, -xInset, 0)
-                                         byRoundingCorners:self.cornerRectStyle
-                                               cornerRadii:CGSizeMake(10,10)].CGPath;
-            
+            CGRect rc = _backgroundLayer.bounds;
             if(self.dateIsSelected)
             {
-                NSLog(@"Date:%@ has weekday=%d, lastweekday=%d",self.date,[self.date fs_weekday],[_calendar lastWeekDay] );
-            if([self.date fs_weekday] == [_calendar lastWeekDay])
-            {
+                float k = _calendar.appearance.selectionPart;
                 
+                BOOL leftEdge = [self isLeftEdgeCell];
+                BOOL rightEdge = [self isRightEdgeCell];
                 
-                
-                path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x -xInset,
-                                                                          _backgroundLayer.bounds.origin.y ,
-                                                                          _backgroundLayer.bounds.size.width + 1.5*xInset,
-                                                                          _backgroundLayer.bounds.size.height)
-                                             byRoundingCorners:self.cornerRectStyle
-                                                   cornerRadii:CGSizeMake(10,10)].CGPath;
-               
-            }else
-                if([self.date fs_weekday] == _calendar.firstWeekday)
-                {
-                    BOOL leftEdge = [self isLeftEdgeCell];
-                    BOOL rightEdge = [self isRightEdgeCell];
-                    
-                    path = [UIBezierPath bezierPathWithRoundedRect:_backgroundLayer.bounds
-                                                 byRoundingCorners:self.cornerRectStyle
-                                                       cornerRadii:CGSizeMake(10,10)].CGPath;
-                    
-
-                    if (leftEdge || _calendar.appearance.allowInterruptSelections) {
-                        path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x - 0.5*xInset ,
-                                                                                  _backgroundLayer.bounds.origin.y,
-                                                                                  _backgroundLayer.bounds.size.width+1.5*xInset ,
-                                                                                  _backgroundLayer.bounds.size.height)
-                                                     byRoundingCorners:self.cornerRectStyle
-                                                           cornerRadii:CGSizeMake(10,10)].CGPath;
-                    }
-                    
-                    if(rightEdge)
-                    {
-                        if (_calendar.appearance.allowInterruptSelections) {
-                            path = [UIBezierPath bezierPathWithRoundedRect:_backgroundLayer.bounds
-                                                         byRoundingCorners:self.cornerRectStyle
-                                                               cornerRadii:CGSizeMake(10,10)].CGPath;
-                        }else
-                        {
-                            path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x - xInset ,
-                                                                                      _backgroundLayer.bounds.origin.y,
-                                                                                      _backgroundLayer.bounds.size.width+2*xInset ,
-                                                                                      _backgroundLayer.bounds.size.height)
-                                                         byRoundingCorners:self.cornerRectStyle
-                                                               cornerRadii:CGSizeMake(10,10)].CGPath;
-                        }
-                        
-                    }
-                    if (leftEdge && rightEdge) {
-                        path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(_backgroundLayer.bounds.origin.x  ,
-                                                                                  _backgroundLayer.bounds.origin.y,
-                                                                                  _backgroundLayer.bounds.size.width ,
-                                                                                  _backgroundLayer.bounds.size.height)
-                                                     byRoundingCorners:self.cornerRectStyle
-                                                           cornerRadii:CGSizeMake(10,10)].CGPath;
-                    }
+                BOOL isSpecialDay =  ([self.date fs_weekday] == [_calendar lastWeekDay] )|| ([self.date fs_weekday] == [_calendar firstWeekday] );
+                if (_calendar.appearance.allowInterruptSelections==NO) {
+                    isSpecialDay = NO;//takes no effect
                 }
                 
-               
-                
-                
+                rc = CGRectMake(-0.5*(self.contentView.frame.size.width*k - _backgroundLayer.bounds.size.width),
+                                _backgroundLayer.bounds.origin.y,
+                                self.contentView.frame.size.width*k,
+                                _backgroundLayer.bounds.size.height);
+
+                NSLog(@"Date:%@ has weekday=%ld, firstweekday=%ld",self.date, [self.date fs_weekday],[_calendar lastWeekDay] );
+                if (isSpecialDay) {
+                    
+                    
+                    if([self.date fs_weekday] == _calendar.firstWeekday )
+                    {
+                        
+                        if(!rightEdge)
+                            rc = CGRectMake(-0.5*(self.contentView.frame.size.width*k - _backgroundLayer.bounds.size.width),
+                                            _backgroundLayer.bounds.origin.y,
+                                            self.contentView.frame.size.width*(k + 0.5*(1-k))+1,
+                                            _backgroundLayer.bounds.size.height);
+                        
+                    }
+                    else
+                    {//last day
+//                        if([self.date fs_weekday] == [_calendar lastWeekDay] )
+                        if(!leftEdge){
+                            rc = CGRectMake(-0.5*(self.contentView.frame.size.width - _backgroundLayer.bounds.size.width),
+                                            _backgroundLayer.bounds.origin.y,
+                                            self.contentView.frame.size.width*(k + 0.5*(1-k))+1,
+                                            _backgroundLayer.bounds.size.height);
+                        }
+                    }
+                    
+                }else
+                {
+                    
+                    if (rightEdge && !leftEdge) {
+                        rc = CGRectMake(-0.5*(self.contentView.frame.size.width - _backgroundLayer.bounds.size.width),
+                                        _backgroundLayer.bounds.origin.y,
+                                        self.contentView.frame.size.width*(k + 0.5*(1-k))+1,
+                                        _backgroundLayer.bounds.size.height);
+                    }
+                    
+                    if (!rightEdge && leftEdge) {
+                        rc = CGRectMake(-0.5*(self.contentView.frame.size.width*k - _backgroundLayer.bounds.size.width),
+                                        _backgroundLayer.bounds.origin.y,
+                                        self.contentView.frame.size.width*(k + 0.5*(1-k))+1,
+                                        _backgroundLayer.bounds.size.height);
+                    }
+                    
+                    if (!leftEdge && !rightEdge) {
+                        //inner element -> need to increase size
+
+                        rc = CGRectMake(-0.5*(self.contentView.frame.size.width - _backgroundLayer.bounds.size.width)-1,
+                                        _backgroundLayer.bounds.origin.y,
+                                        self.contentView.frame.size.width+2,
+                                        _backgroundLayer.bounds.size.height);
+                    }
+ 
+                }
+
             }
-            else
-            {
-                
-                path = [UIBezierPath bezierPathWithRoundedRect:_backgroundLayer.bounds
-                                             byRoundingCorners:self.cornerRectStyle
-                                                   cornerRadii:CGSizeMake(10,10)].CGPath;
-            }
-            
+            path = [UIBezierPath bezierPathWithRoundedRect:rc
+                                         byRoundingCorners:self.cornerRectStyle
+                                               cornerRadii:CGSizeMake(10,10)].CGPath;
         }break;
         default:
             break;
     }
+    
     
     if (!CGPathEqualToPath(_backgroundLayer.path,path)) {
         _backgroundLayer.path = path;
     }
 }
 
+- (CGRect)rectForRightEdgeCell
+{
+    CGRect rc;
+    rc = CGRectMake(_backgroundLayer.bounds.origin.x -xInset,
+                    _backgroundLayer.bounds.origin.y ,
+                    _backgroundLayer.bounds.size.width + 1.5*xInset,
+                    _backgroundLayer.bounds.size.height);
+    
+    BOOL leftEdge = [self isLeftEdgeCell];
+    BOOL rightEdge = [self isRightEdgeCell];
+    
+    if (leftEdge) {
+        rc = CGRectMake(_backgroundLayer.bounds.origin.x ,
+                        _backgroundLayer.bounds.origin.y ,
+                        _backgroundLayer.bounds.size.width + 0.5*xInset,
+                        _backgroundLayer.bounds.size.height);
+    }
+    
+    if (leftEdge && rightEdge) {
+        rc = CGRectMake(_backgroundLayer.bounds.origin.x ,
+                        _backgroundLayer.bounds.origin.y ,
+                        _backgroundLayer.bounds.size.width ,
+                        _backgroundLayer.bounds.size.height);
+    }
+
+    return rc;
+}
+
+- (CGRect)rectForLeftEdgeCell
+{
+    
+    float k = _calendar.appearance.selectionPart;
+    CGRect rc;
+    BOOL leftEdge = [self isLeftEdgeCell];
+    BOOL rightEdge = [self isRightEdgeCell];
+    
+    rc = _backgroundLayer.bounds;
+    
+    if (leftEdge || _calendar.appearance.allowInterruptSelections)
+        rc = CGRectMake(_backgroundLayer.bounds.origin.x - 0.5*xInset ,
+                        _backgroundLayer.bounds.origin.y,
+                        _backgroundLayer.bounds.size.width+1.5*xInset ,
+                        _backgroundLayer.bounds.size.height);
+    
+    
+    if(rightEdge)
+    {
+        if (_calendar.appearance.allowInterruptSelections) {
+            rc = _backgroundLayer.bounds;
+            
+        }else
+        {
+            rc = CGRectMake(_backgroundLayer.bounds.origin.x - xInset ,
+                            _backgroundLayer.bounds.origin.y,
+                            _backgroundLayer.bounds.size.width+2*xInset ,
+                            _backgroundLayer.bounds.size.height);
+            
+        }
+        
+    }
+    if (leftEdge && rightEdge) {
+
+        rc = CGRectMake(-0.5*(self.contentView.frame.size.width*k - _backgroundLayer.bounds.size.width),
+                        _backgroundLayer.bounds.origin.y,
+                        self.contentView.frame.size.width*k,
+                        _backgroundLayer.bounds.size.height);
+        
+    }
+
+    return rc;
+}
+
+- (CGRect)rectForInnerCell
+{
+    CGRect rc = CGRectInset(_backgroundLayer.bounds, - _backgroundLayer.bounds.size.width, 0);
+   
+    return rc;
+}
 - (BOOL)isLeftEdgeCell
 {
     __block BOOL isEdgeCell = NO;

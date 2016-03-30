@@ -40,13 +40,14 @@
     calendar.weekDaysView.layer.borderColor = [UIColor brownColor].CGColor;
     calendar.weekDaysView.layer.borderWidth =1;
     calendar.appearance.allowInterruptSelections = YES;
+    calendar.appearance.selectionPart = 0.7;
  //   [calendar selectDate:[NSDate date]];
 //    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24]];
 //    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*2]];
    // [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*3]];
 //    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3600*24*4]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:2*3600*24]];
-    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:3*3600*24]];
+//    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:2*3600*24]];
+    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:11*3600*24]];
 //    [calendar selectDate:[NSDate dateWithTimeIntervalSinceNow:7*3600*24]];
     
     [self.view addSubview:calendar];
@@ -65,6 +66,7 @@
 
 - (BOOL)calendar:(FSCalendar *)calendar shouldSelectDate:(NSDate *)date
 {
+ //   return NO;
     BOOL shouldDedeselect = [_calendar dayOfDate:date] != 5;
     if (!shouldDedeselect) {
         [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Forbidden date %@ to be selected",[calendar stringFromDate:date]] message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
