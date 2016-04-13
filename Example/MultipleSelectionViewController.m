@@ -67,11 +67,11 @@
 - (BOOL)calendar:(FSCalendar *)calendar shouldSelectDate:(NSDate *)date
 {
  //   return NO;
-    BOOL shouldDedeselect = [_calendar dayOfDate:date] != 5;
-    if (!shouldDedeselect) {
-        [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Forbidden date %@ to be selected",[calendar stringFromDate:date]] message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-        return NO;
-    }
+//    BOOL shouldDedeselect = [_calendar dayOfDate:date] != 5;
+//    if (!shouldDedeselect) {
+//        [[[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Forbidden date %@ to be selected",[calendar stringFromDate:date]] message:@"" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+//        return NO;
+//    }
     return YES;
 }
 
@@ -105,10 +105,15 @@
 
 - (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance selectionColorForDate:(NSDate *)date
 {
-//    if ([_calendar dayOfDate:date] % 2 == 0) {
-//        return appearance.selectionColor;
-//    }
-    return [UIColor purpleColor];
+    if ([_calendar dayOfDate:date] % 2 == 0) {
+        return appearance.selectionColor;
+    }
+    
+    if ([date compare:[NSDate date]]==NSOrderedSame) {
+        return [UIColor yellowColor];
+
+    }else
+        return [UIColor purpleColor];
 }
 
 - (UIColor *)calendar:(FSCalendar *)calendar appearance:(FSCalendarAppearance *)appearance borderDefaultColorForDate:(NSDate *)date

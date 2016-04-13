@@ -1634,7 +1634,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     cell.subtitle  = [self subtitleForDate:cell.date];
     cell.dateIsSelected = [_selectedDates containsObject:cell.date];
     if (cell.dateIsSelected) {
-        NSLog(@"Selected dates:%@ and selected ranges:%@",_selectedDates,_selectedRanges);
+   //     NSLog(@"Selected dates:%@ and selected ranges:%@",_selectedDates,_selectedRanges);
         NSInteger daysPassed = [cell.date fs_daysFrom:[NSDate dateWithTimeIntervalSince1970:0]];
         cell.cornerRectStyle = 0;
         
@@ -1810,7 +1810,7 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 
     }
     */
-    NSLog(@"Range:%@",_selectedRanges);
+ //   NSLog(@"Range:%@",_selectedRanges);
 }
 
 - (NSArray *)visibleStickyHeaders

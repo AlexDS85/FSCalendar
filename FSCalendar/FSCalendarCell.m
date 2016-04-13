@@ -319,7 +319,7 @@
                                 self.contentView.frame.size.width*k,
                                 _backgroundLayer.bounds.size.height);
 
-                NSLog(@"Date:%@ has weekday=%ld, firstweekday=%ld",self.date, [self.date fs_weekday],[_calendar lastWeekDay] );
+     //           NSLog(@"Date:%@ has weekday=%ld, firstweekday=%ld",self.date, [self.date fs_weekday],[_calendar lastWeekDay] );
                 if (isSpecialDay) {
                     
                     

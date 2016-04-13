@@ -26,13 +26,13 @@
 
 - (void)calendar:(FSCalendar *)calendar didSelectDate:(NSDate *)date
 {
-    NSLog(@"did select date %@",[calendar stringFromDate:date format:@"yyyy/MM/dd"]);
+ //   NSLog(@"did select date %@",[calendar stringFromDate:date format:@"yyyy/MM/dd"]);
     
     NSMutableArray *selectedDates = [NSMutableArray arrayWithCapacity:calendar.selectedDates.count];
     [calendar.selectedDates enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         [selectedDates addObject:[calendar stringFromDate:date format:@"yyyy/MM/dd"]];
     }];
-    NSLog(@"selected dates is %@",selectedDates);
+//    NSLog(@"selected dates is %@",selectedDates);
     
 }
 
