@@ -120,7 +120,8 @@ IB_DESIGNABLE
 - (NSInteger)lastWeekDay;
 - (void)reloadData;
 - (CGSize)sizeThatFits:(CGSize)size;
-
+- (void)setMinimumDaysInFirstWeek:(NSUInteger)minimumDays;
+- (NSUInteger)minimumDaysInFirstWeek;
 - (void)setScope:(FSCalendarScope)scope animated:(BOOL)animated;
 
 - (void)selectDate:(NSDate *)date;

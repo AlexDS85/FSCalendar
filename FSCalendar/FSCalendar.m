@@ -776,6 +776,16 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
 
 #pragma mark - Properties
 
+- (void)setMinimumDaysInFirstWeek:(NSUInteger)minimumDays
+{
+    
+    self.calendar.minimumDaysInFirstWeek = minimumDays;
+}
+- (NSUInteger)minimumDaysInFirstWeek
+{
+    return self.calendar.minimumDaysInFirstWeek;
+}
+
 - (void)setAppearance:(FSCalendarAppearance *)appearance
 {
     if (_appearance != appearance) {
