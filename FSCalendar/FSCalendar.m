@@ -2123,6 +2123,19 @@ typedef NS_ENUM(NSUInteger, FSCalendarOrientation) {
     return component.day;
 }
 
+- (NSInteger)weekdayOfDateWithFirstWeekDayCorrection:(NSDate *)date
+{
+    NSDateComponents *component = [self.calendar components:NSCalendarUnitWeekday fromDate:date];
+    
+    NSUInteger weekday=[component weekday]==1?7:[component weekday]-1;
+    
+    
+
+    
+    
+    return weekday;
+}
+
 - (NSInteger)weekdayOfDate:(NSDate *)date
 {
     NSDateComponents *component = [self.calendar components:NSCalendarUnitWeekday fromDate:date];

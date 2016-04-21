@@ -141,6 +141,7 @@ IB_DESIGNABLE
 - (NSInteger)monthOfDate:(NSDate *)date;
 - (NSInteger)dayOfDate:(NSDate *)date;
 - (NSInteger)weekdayOfDate:(NSDate *)date;
+- (NSInteger)weekdayOfDateWithFirstWeekDayCorrection:(NSDate *)date;
 - (NSInteger)weekOfDate:(NSDate *)date;
 - (NSInteger)hourOfDate:(NSDate *)date;
 - (NSInteger)miniuteOfDate:(NSDate *)date;
